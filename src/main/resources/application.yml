@@ -2,8 +2,9 @@ micronaut:
   application:
     name: testApi
   server:
+      port: 5000
       cors:
-          enabled: true
+        enabled: true
 datasources:
   default:
     driver-class-name: ${DATASOURCES_DEFAULT_DRIVER:org.mariadb.jdbc.Driver }
@@ -11,7 +12,7 @@ datasources:
     dialect: MYSQL
     jdbc-url: ${DATASOURCES_DEFAULT_URL:`jdbc:mariadb://localhost:3308/pokemon` }
     username: ${DATASOURCES_DEFAULT_USER:root }
-    password:  ${DATASOURCES_DEFAULT_PASSWORD:root }
+    password: ${DATASOURCES_DEFAULT_PASSWORD:root }
 liquibase:
   datasources:
     default:
