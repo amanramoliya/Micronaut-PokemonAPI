@@ -18,6 +18,11 @@ jobs:
         run : chmod +x ./gradlew
       - name: Run gradle build
         run: ./gradlew build
+      - name: Upload Artifacts
+        uses: actions/upload-artifacts@v3
+        with:
+          name: app-jar
+          path: build/libs/test-api-0.1-all.jar
 
 
 
