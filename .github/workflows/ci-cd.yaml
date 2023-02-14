@@ -15,7 +15,7 @@ jobs:
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
       - name: Give gradle executable permission
-        run : chmod +x ./gradlew
+        run: chmod +x ./gradlew
       - name: Run gradle build
         run: ./gradlew build
       - name: Upload Artifacts
@@ -23,6 +23,19 @@ jobs:
         with:
           name: app-jar
           path: build/libs/*-all.jar
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: app-jar
+      - name: List Directory
+        run: ls
+
+
 
 
 
