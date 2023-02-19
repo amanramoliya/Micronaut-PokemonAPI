@@ -10,7 +10,7 @@ datasources:
     driver-class-name: ${DATASOURCES_DEFAULT_DRIVER:org.mariadb.jdbc.Driver }
     db-type: mariadb
     dialect: MYSQL
-    jdbc-url: ${DATASOURCES_DEFAULT_URL:`jdbc:mariadb://localhost:3308/pokemon` }
+    jdbc-url: ${DATASOURCES_DEFAULT_URL:`jdbc:mariadb://localhost:3308/test` }
     username: ${DATASOURCES_DEFAULT_USER:root }
     password: ${DATASOURCES_DEFAULT_PASSWORD:root }
 liquibase:

@@ -25,6 +25,7 @@ class PokemonServiceShould {
   Power power;
   Pokemon pikachuPokemon;
   Pokemon bulbasaurPokemon;
+  PokemonUpdationForm pokemonUpdationForm;
 
   List<Pokemon> pokemons;
 
@@ -43,6 +44,8 @@ class PokemonServiceShould {
 
     pokemonCreationForm =
         new PokemonCreationForm(pikachuPokemon.getName(), pikachuPokemon.getPower().getName());
+
+    pokemonUpdationForm = new PokemonUpdationForm(bulbasaurPokemon.getId(),bulbasaurPokemon.getName(),"Fire",bulbasaurPokemon.getImageUrl());
 
     pokemonRepository = Mockito.mock(PokemonRepository.class);
 
@@ -102,17 +105,21 @@ class PokemonServiceShould {
   void update() {
 
     Mockito.when(pokemonRepository.findById(anyInt())).thenReturn(Optional.ofNullable(bulbasaurPokemon));
+    Mockito.when(powerRepository.findByName(anyString())).thenReturn(power);
+
 
     Mockito.when(pokemonRepository.findByNameIgnoreCase(anyString()))
         .thenReturn(Optional.ofNullable(bulbasaurPokemon));
 
     Mockito.when(pokemonRepository.update(Mockito.any())).thenReturn(bulbasaurPokemon);
 
-    Pokemon updatedPokemon = pokemonService.update(bulbasaurPokemon);
+    Pokemon updatedPokemon = pokemonService.update(pokemonUpdationForm);
 
     Mockito.verify(pokemonRepository).update(Mockito.any());
     Mockito.verify(pokemonRepository).findById(anyInt());
     Mockito.verify(pokemonRepository).findByNameIgnoreCase(anyString());
+    Mockito.verify(powerRepository).findByName(anyString());
+
 
     Assertions.assertThat(updatedPokemon).isEqualTo(bulbasaurPokemon);
   }
@@ -144,10 +151,10 @@ class PokemonServiceShould {
 
     Mockito.when(pokemonRepository.findById(anyInt())).thenReturn(Optional.empty());
 
-    Assertions.assertThatThrownBy(() -> pokemonService.update(bulbasaurPokemon));
+    Assertions.assertThatThrownBy(() -> pokemonService.update(pokemonUpdationForm));
 
     Assertions.catchThrowableOfType(
-        () -> pokemonService.update(bulbasaurPokemon), PokemonValidationException.class);
+        () -> pokemonService.update(pokemonUpdationForm), PokemonValidationException.class);
   }
 
   @Test
@@ -158,10 +165,10 @@ class PokemonServiceShould {
     Mockito.when(pokemonRepository.findByNameIgnoreCase(anyString()))
         .thenReturn(Optional.ofNullable(pikachuPokemon));
 
-    Assertions.assertThatThrownBy(() -> pokemonService.update(bulbasaurPokemon));
+    Assertions.assertThatThrownBy(() -> pokemonService.update(pokemonUpdationForm));
 
     Assertions.catchThrowableOfType(
-        () -> pokemonService.update(bulbasaurPokemon), PokemonValidationException.class);
+        () -> pokemonService.update(pokemonUpdationForm), PokemonValidationException.class);
   }
 
   @Test
@@ -184,7 +191,7 @@ class PokemonServiceShould {
 
     Mockito.when(pokemonRepository.update(Mockito.any())).thenReturn(bulbasaurPokemon);
 
-    Pokemon updatedPokemon = pokemonService.update(bulbasaurPokemon);
+    Pokemon updatedPokemon = pokemonService.update(pokemonUpdationForm);
 
     Mockito.verify(pokemonRepository).update(Mockito.any());
     Mockito.verify(pokemonRepository).findById(anyInt());

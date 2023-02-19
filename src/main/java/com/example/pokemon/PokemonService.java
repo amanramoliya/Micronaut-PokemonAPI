@@ -43,13 +43,13 @@ public class PokemonService {
     Pokemon pokemon = new Pokemon();
     pokemon.setName(pokemonForm.getName());
     pokemon.setPower(power);
-   Pokemon updatedPokemon = pokemonRepository.save(pokemon);
+   Pokemon createdPokemon = pokemonRepository.save(pokemon);
     pokemon.setImageUrl(
         "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/"
             + pokemon.getId()
             + ".png");
 
-    return updatedPokemon;
+    return createdPokemon;
   }
 
   public Pokemon getById(Integer id) {
@@ -58,27 +58,34 @@ public class PokemonService {
         .orElseThrow(() -> new PokemonValidationException("Pokemon with id: " + id + " Not found"));
   }
 
-  public Pokemon update(Pokemon pokemon) {
+  @Transactional
+  public Pokemon update(PokemonUpdationForm pokemonForm) {
+    Pokemon updatedPokemon = new Pokemon();
     Pokemon pokemonWithId =
         pokemonRepository
-            .findById(pokemon.getId())
+            .findById(pokemonForm.getId())
             .orElseThrow(
                 () ->
                     new PokemonValidationException(
-                        "Pokemon With id: " + pokemon.getId() + " Not exist"));
+                        "Pokemon With id: " + pokemonForm.getId() + " Not exist"));
 
     Pokemon pokemonWithNameExist =
         pokemonRepository
-            .findByNameIgnoreCase(pokemon.getName())
+            .findByNameIgnoreCase(pokemonForm.getName())
             .orElse(null);
     if (pokemonWithNameExist!=null && !Objects.equals(pokemonWithNameExist.getId(), pokemonWithId.getId())) {
       throw new PokemonValidationException(
-              "Pokemon with name: " + pokemon.getName() + " Already exist");
+              "Pokemon with name: " + pokemonForm.getName() + " Already exist");
     } else {
+      Power power = powerService.get(pokemonForm.getPower());
+      Pokemon pokemon = new Pokemon();
+      pokemon.setName(pokemonForm.getName());
+      pokemon.setPower(power);
+      pokemon.setImageUrl(pokemonForm.getImageUrl());
+      updatedPokemon = pokemonRepository.update(pokemon);
 
-      pokemonRepository.update(pokemon);
     }
-    return pokemon;
+    return updatedPokemon;
   }
 
   public void delete(Integer id) {

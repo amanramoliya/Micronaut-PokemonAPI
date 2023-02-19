@@ -15,13 +15,13 @@ public class PokemonController {
   }
 
   @Get
-  public List<Pokemon> test() {
+  public List<Pokemon> getAll() {
     return pokemonService.get();
   }
 
   @Get("/{id}")
-  public Pokemon getById(@PathVariable("id") Integer id) {
-    return pokemonService.getById(id);
+  public HttpResponse<Pokemon> getById(@PathVariable("id") Integer id) {
+    return HttpResponse.ok(pokemonService.getById(id));
   }
 
   @Post
@@ -30,9 +30,9 @@ public class PokemonController {
   }
 
   @Put
-  public HttpResponse<Pokemon> update(@Body Pokemon pokemon) {
+  public HttpResponse<Pokemon> update(@Body PokemonUpdationForm pokemonForm) {
 
-    return HttpResponse.created(pokemonService.update(pokemon));
+    return HttpResponse.created(pokemonService.update(pokemonForm));
   }
 
   @Delete("/{id}")

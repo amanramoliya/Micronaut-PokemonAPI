@@ -22,6 +22,6 @@ public class Serialization implements ApplicationEventListener<StartupEvent> {
 
   @Override
   public void onApplicationEvent(StartupEvent event) {
-    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
   }
 }
